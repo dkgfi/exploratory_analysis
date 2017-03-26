@@ -46,24 +46,19 @@ conversion <- function(x) {
 bind <- function(x,x_convers) {
   rbind(x[x$currency%in%c("USD"),],x_convers[,1:ncol(x)])
 }
-# conversions & bind - ethiopia
-ethiopia_convers <- conversion(ethiopia)
-ethiopia_convers$value <- ethiopia_convers$value*ethiopia_convers$rate
+# conversion & bind - ethiopia
+ethiopia_convers <- conversion(ethiopia); ethiopia_convers$value <- ethiopia_convers$value*ethiopia_convers$rate
 ethiopia <- bind(ethiopia,ethiopia_convers)
-# conversions - netherlands
-netherlands_convers <- conversion(netherlands)
-netherlands_convers$value <- netherlands_convers$value*netherlands_convers$rate
+# conversion & bind - netherlands
+netherlands_convers <- conversion(netherlands); netherlands_convers$value <- netherlands_convers$value*netherlands_convers$rate
 netherlands <- bind(netherlands,netherlands_convers)
-# conversions - south_africa
-south_africa_convers <- conversion(south_africa)
-south_africa_convers$value <- south_africa_convers$value*south_africa_convers$rate
+# conversion & bind - south_africa
+south_africa_convers <- conversion(south_africa); south_africa_convers$value <- south_africa_convers$value*south_africa_convers$rate
 south_africa <- bind(south_africa,south_africa_convers)
-# conversions - usa
-usa_convers <- conversion(usa)
-usa_convers$value <- usa_convers$value*usa_convers$rate
+# conversion & bind - usa
+usa_convers <- conversion(usa); usa_convers$value <- usa_convers$value*usa_convers$rate
 usa <- bind(usa,usa_convers)
-# conversions - trade
-trade_convers <- conversion(trade_data)
-trade_convers$value <- trade_convers$value*usa_convers$rate
+# conversion & bind - trade
+trade_convers <- conversion(trade_data); trade_convers$value <- trade_convers$value*usa_convers$rate
 trade_data <- bind(trade_data,trade_convers)
 
