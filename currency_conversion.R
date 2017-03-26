@@ -15,10 +15,8 @@
 filenames <- list.files(path=data_path,
                         pattern=".*csv")
 
-# trade files
-trade_files <- lapply(filenames[grep("trade",filenames)],read.csv)
 # trade data
-trade_data <- do.call(rbind,trade_files)
+trade_data <- do.call(rbind,lapply(filenames[grep("trade",filenames)],read.csv))
 # unique currencies
 unique(trade_data$currency) # EUR, JPY, USD
 
@@ -36,8 +34,7 @@ currency <- read.csv(filenames[3])
 currency <- currency[order(currency$id),]
 # exchange rate
 exchange_rate <- read.csv(filenames[7])
-exchange_rate <- exchange_rate[order(exchange_rate$currency_id),]
-exchange_rate <- exchange_rate[exchange_rate$currency_id%in%currency$id[currency$code%in%c("EUR","JPY")],]
+exchange_rate <- exchange_rate[order(exchange_rate$currency_id),]exchange_rate[exchange_rate$currency_id%in%currency$id[currency$code%in%c("EUR","JPY")],]
 # merge exchange rate with currency 
 currency_convers <- merge(exchange_rate,currency[,c(1,3)],by.x="currency_id",by.y="id")[,c(1,3:4,6)]
 currency_convers <- currency_convers[order(currency_convers$code,currency_convers$month),]
