@@ -6,10 +6,13 @@
 # note: date data needs to be in the format (Month-YR)
 
 # set working directory
-setwd("~/Desktop/gfi")
+###setwd("~/Desktop/gfi")
+
+# path
+###data_path = "~/Desktop/gfi"
 
 # files
-filenames <- list.files(path="~/Desktop/gfi",
+filenames <- list.files(path=data_path,
                         pattern=".*csv")
 
 # trade files
