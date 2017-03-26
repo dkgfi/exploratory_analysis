@@ -4,6 +4,7 @@
 ############################
 
 # note: date data needs to be in the format (Month-YR)
+# note: this can be applied to country specific data
 
 # set working directory
 ###setwd("~/Desktop/gfi")
@@ -19,12 +20,6 @@ filenames <- list.files(path=data_path,
 trade_data <- do.call(rbind,lapply(filenames[grep("trade",filenames)],read.csv))
 # unique currencies
 unique(trade_data$currency) # EUR, JPY, USD
-
-# specific country files - ethiopia, netherlands, south africa, usa
-ethiopia <- read.csv(filenames[grep("ethiopia",filenames)])
-netherlands <- read.csv(filenames[grep("netherlands",filenames)])
-south_africa <- read.csv(filenames[grep("south_africa",filenames)])
-usa <- read.csv(filenames[grep("usa",filenames)])
 
 # currency
 currency <- read.csv(filenames[grep("currency",filenames])
@@ -46,18 +41,7 @@ conversion <- function(x) {
 bind <- function(x,x_convers) {
   rbind(x[x$currency%in%c("USD"),],x_convers[,1:ncol(x)])
 }
-# conversion & bind - ethiopia
-ethiopia_convers <- conversion(ethiopia); ethiopia_convers$value <- ethiopia_convers$value*ethiopia_convers$rate
-ethiopia <- bind(ethiopia,ethiopia_convers)
-# conversion & bind - netherlands
-netherlands_convers <- conversion(netherlands); netherlands_convers$value <- netherlands_convers$value*netherlands_convers$rate
-netherlands <- bind(netherlands,netherlands_convers)
-# conversion & bind - south_africa
-south_africa_convers <- conversion(south_africa); south_africa_convers$value <- south_africa_convers$value*south_africa_convers$rate
-south_africa <- bind(south_africa,south_africa_convers)
-# conversion & bind - usa
-usa_convers <- conversion(usa); usa_convers$value <- usa_convers$value*usa_convers$rate
-usa <- bind(usa,usa_convers)
+
 # conversion & bind - trade
 trade_convers <- conversion(trade_data); trade_convers$value <- trade_convers$value*usa_convers$rate
 trade_data <- bind(trade_data,trade_convers)
