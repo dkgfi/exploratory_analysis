@@ -3,7 +3,7 @@
 # CURRENCY CONVERSIONS #
 ############################
 
-# note: date data needs to be in the form (Month-YR)
+# note: date data needs to be in the format (Month-YR)
 
 # set working directory
 setwd("~/Desktop/gfi")
