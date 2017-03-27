@@ -46,7 +46,7 @@ bind <- function(x,x_convers) {
   }
                                                                    
 # conversion & bind - trade
-trade_convers <- conversion(trade_data); trade_convers$value <- trade_convers$value*usa_convers$rate
+trade_convers <- conversion(trade_data); trade_convers$value <- trade_convers$value*trade_convers$rate
 trade_data <- bind(trade_data,trade_convers)
                                                                    
                                                                    
