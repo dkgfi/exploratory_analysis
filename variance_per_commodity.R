@@ -55,7 +55,6 @@ agg_commodity_variance <- function(trade){
   # creating agg table at commodity level
   agg <- trade[, .(sd_unit1price=scale(unit1price)[2], 
                    sum_value=sum(value), 
-                   hs_desc=unique(hs_description),
                    country_id_cnt=length(unique(country_id)),
                    src_country_id_cnt=length(unique(src_country_id)),
                    src_country_list=list(unique(src_country_name3)),
@@ -104,7 +103,6 @@ for (commodity_id_seq in list(seq(0, 15000), seq(15001, 30000), seq(30001, 45000
   
   # merge country names
   t <- merge_country_codes(t, country=country)
-  t <- t[is.na(hs_description)==F]  # remove any commodities without a description
   
   # calculate variance stats at commodity level
   cat(paste('Calculating Variance... \n'))
@@ -113,7 +111,7 @@ for (commodity_id_seq in list(seq(0, 15000), seq(15001, 30000), seq(30001, 45000
     
     # get commodity hs_descriptions
     agg_tmp <- merge(agg_tmp, commodity[, .(hs_description, hs_code, id)], by.x='commodity_id', by.y='id')
-    
+    agg_tmp <- agg_tmp[is.na(hs_description)==F]  # remove any commodities without a description
     agg[[length(agg)+1]] = agg_tmp
   })
   
