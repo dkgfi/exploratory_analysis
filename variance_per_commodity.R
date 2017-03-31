@@ -53,19 +53,27 @@ agg_commodity_variance <- function(trade){
   trade[,unit1price:=value/quantity_1]
   
   # creating agg table at commodity level
-  agg <- trade[, .(sd_unit1price=scale(unit1price)[2], 
-                   sum_value=sum(value), 
-                   country_id_cnt=length(unique(country_id)),
-                   src_country_id_cnt=length(unique(src_country_id)),
-                   src_country_list=list(unique(src_country_name3)),
-                   country_list=list(unique(country_name3))
+  agg <- trade[, .(sd_unit1price = scale(unit1price)[2], 
+                   sum_value = sum(value), 
+                   country_id_cnt = length(unique(country_id)),
+                   src_country_id_cnt = length(unique(src_country_id)),
+                   anomalous_src_country = {
+                     commodity_id_mean <- mean(scale(unit1price)[2])
+                     list(setdiff(.SD[, mean(unit1price)-commodity_id_mean, by=.(src_country_name3)][order(abs(V1), decreasing=T)][['src_country_name3']][1:3], NA))
+                     },
+                   anomalous_country = {
+                     commodity_id_mean <- mean(scale(unit1price)[2])
+                     list(setdiff(.SD[, mean(unit1price)-commodity_id_mean, by=.(country_name3)][order(abs(V1), decreasing=T)][['country_name3']][1:3], NA))
+                     },
+                   
+                   src_country_list_sortby_value = list(.SD[, sum(value), by=src_country_name3][order(V1, decreasing=T)][['src_country_name3']]),
+                   country_list_sortby_value = list(.SD[, sum(value), by=country_name3][order(V1, decreasing=T)][['country_name3']])
   ), by=commodity_id]
   
   # sort and return variance aggregate table
   if(dim(agg)[1] > 0) agg <- agg[order(-abs(sd_unit1price))]
   return(agg)
 }
-
 
 ###########################################
 # Analysis ################################
@@ -112,7 +120,7 @@ for (commodity_id_seq in list(seq(0, 15000), seq(15001, 30000), seq(30001, 45000
     # get commodity hs_descriptions
     agg_tmp <- merge(agg_tmp, commodity[, .(hs_description, hs_code, id)], by.x='commodity_id', by.y='id')
     agg_tmp <- agg_tmp[is.na(hs_description)==F]  # remove any commodities without a description
-    agg[[length(agg)+1]] = agg_tmp
+    agg[[length(agg)+1]] <- agg_tmp
   })
   
   rm(t) # hopefully save some memory
@@ -125,5 +133,9 @@ aggdt <- rbindlist(agg)
 aggdt <- aggdt[order(-sd_unit1price)]
 
 # write results out to CSV
+colname_order <- { tmp <- c('commodity_id', 'sum_value', 'sd_unit1price', 'country_id_cnt', 'src_country_id_cnt', 'hs_code', 'hs_description')
+  c(tmp, setdiff(names(aggdt), tmp))
+}
+aggdt <- aggdt[,eval(quote(colname_order)), with=F]
 write.csv(lapply(data.frame(aggdt), as.character), '../results/scaled_stddev_by_commodity.csv', row.names=F)
 
