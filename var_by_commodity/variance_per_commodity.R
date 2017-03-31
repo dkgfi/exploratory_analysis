@@ -58,11 +58,11 @@ agg_commodity_variance <- function(trade){
                    country_id_cnt = length(unique(country_id)),
                    src_country_id_cnt = length(unique(src_country_id)),
                    anomalous_src_country = {
-                     commodity_id_mean <- mean(scale(unit1price)[2])
+                     commodity_id_mean <- mean(unit1price)
                      list(setdiff(.SD[, mean(unit1price)-commodity_id_mean, by=.(src_country_name3)][order(abs(V1), decreasing=T)][['src_country_name3']][1:3], NA))
                      },
                    anomalous_country = {
-                     commodity_id_mean <- mean(scale(unit1price)[2])
+                     commodity_id_mean <- mean(unit1price)
                      list(setdiff(.SD[, mean(unit1price)-commodity_id_mean, by=.(country_name3)][order(abs(V1), decreasing=T)][['country_name3']][1:3], NA))
                      },
                    
