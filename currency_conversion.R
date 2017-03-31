@@ -1,5 +1,6 @@
 
 
+
 ############################
 # CURRENCY CONVERSIONS #
 ############################
@@ -21,9 +22,7 @@ filenames <- list.files(path=data_path,
 
 # trade data
 trade_files <- filenames[grep("trade_src",filenames)]
-trade_data1 <- read.csv(trade_files[[1]]); trade_data2 <- read.csv(trade_files[[2]])
-trade_data3 <- read.csv(trade_files[[3]]); trade_data4 <- read.csv(trade_files[[4]])
-trade_data5 <- read.csv(trade_files[[5]]); trade_data6 <- read.csv(trade_files[[6]])
+trade_data <- lapply(trade_files,read.csv)
 
 # currency
 currency <- read.csv(filenames[grep("currency",filenames)])
@@ -34,7 +33,13 @@ exchange_rate <- exchange_rate[exchange_rate$currency_id%in%currency$id[currency
 # merge exchange rate with currency 
 currency_convers <- merge(exchange_rate,currency[,c(1,3)],by.x="currency_id",by.y="id")[,c(1,3:4,6)]
 currency_convers <- currency_convers[order(currency_convers$code,currency_convers$month),]
-                                                                   
+
+# year-month
+for (i in 1:6) {
+  trade_data[[i]]$month <- as.yearmon(trade_data[[i]]$month)
+}
+currency_convers$month <- as.yearmon(currency_convers$month)
+
 # conversion
 conversion <- function(x) {
 merge(x[x$currency%in%c("EUR","JPY"),][order(x$currency[x$currency%in%c("EUR","JPY")],x$month[x$currency%in%c("EUR","JPY")]),],currency_convers,
@@ -45,29 +50,12 @@ bind <- function(x,x_convers) {
   rbind(x[x$currency%in%c("USD"),],x_convers[,1:ncol(x)])
   }
                                                                    
-# conversion & bind - trade1
-trade_convers1 <- conversion(trade_data1); trade_convers1$value <- trade_convers1$value*trade_convers1$rate
-trade_data1 <- bind(trade_data1,trade_convers1); trade_data1$currency = "USD"
-write.csv(trade_data1,trade_files[[2]])
-# conversion & bind - trade2
-trade_convers2 <- conversion(trade_data2); trade_convers2$value <- trade_convers2$value*trade_convers2$rate
-trade_data2 <- bind(trade_data2,trade_convers2); trade_data2$currency = "USD"
-write.csv(trade_data2,trade_files[[2]])
-# conversion & bind - trade3
-trade_convers3 <- conversion(trade_data3); trade_convers3$value <- trade_convers3$value*trade_convers3$rate
-trade_data3 <- bind(trade_data3,trade_convers3); trade_data3$currency = "USD"
-write.csv(trade_data3,trade_files[[2]])
-# conversion & bind - trade4
-trade_convers4 <- conversion(trade_data4); trade_convers4$value <- trade_convers4$value*trade_convers4$rate
-trade_data4 <- bind(trade_data4,trade_convers4); trade_data4$currency = "USD"
-write.csv(trade_data4,trade_files[[2]])
-# conversion & bind - trade5
-trade_convers5 <- conversion(trade_data5); trade_convers5$value <- trade_convers5$value*trade_convers5$rate
-trade_data5 <- bind(trade_data5,trade_convers5); trade_data5$currency = "USD"
-write.csv(trade_data5,trade_files[[2]])
-# conversion & bind - trade6
-trade_convers6 <- conversion(trade_data6); trade_convers6$value <- trade_convers6$value*trade_convers6$rate
-trade_data6 <- bind(trade_data6,trade_convers6); trade_data6$currency = "USD"
-write.csv(trade_data6,trade_files[[6]])
+# conversion & bind - trade
+for (i in 1:6) {
+  trade_convers[[i]] <- conversion(trade_data[[i]])
+  trade_convers[[i]]$value <- trade_convers[[i]]$value*trade_convers[[i]]$rate
+  trade_data[[i]] <- bind(trade_data[[i]],trade_convers[[i]])
+  trade_data[[i]]$currency = "USD"
+  write.csv(trade_data[[i]],trade_files[[i]])
+}
 
-                                     
