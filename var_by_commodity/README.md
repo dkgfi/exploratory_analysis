@@ -17,12 +17,51 @@ This provides a framework for a for calculating the variance in commodity unit p
 * Only shipments measured in kilograms (`unit_1_id==24`)
 * Only shipments valued at > 1 in quantity and value (`quantity_1>0 & value>1 & is.na(value)==F`) 
 
+#### Assumptions
+
+We are assuming that `id` from the commodity table corresponds to `commodity_id` in the trade table.  The commodity table contains 55618 unique `ids` from 1 to 55620.  The trade tables (as described above) contain roughly the same number of unique `commodity_ids` (48703) ranging from 4 to 54740.  The order of `commodity_id` appears to be related to currency (USD => EUR => JPY => USD again).  Note that each commodity_id can map to the same hs_code (appears to happen up to twice in some cases).
+
 #### Comments on commodity sample
 
 * The full trade table contains `commodity_ids` ranging from **4** to **54745**.
 * Restricting the trade table to just `currency=='EUR'` leaves `commodity_ids` ranging from **27406** to **38026**. 
 * This leaves ~9k unique `commodity ids` shipped in EUR.
 * While commodities priced in USD have more unique commodities shipped (~26k vs the ~9k shipped in EUR), they account for less transactions in the trade table (~13% in USD vs the ~85% in EUR and ~2% in JPY).
+* This sample includes only (and all) trades reported European countries (all US reported trade is in USD).  All EU trade (using `src_country_id`) is in `currency=='EUR'`.
+
+
+#### Summary of sample
+
+* `src_country_name3`: 3 letter name of reporting country (`src_country_name`) 
+* `src_country_id`: `country_id` from trade table for reporting country
+* `value_EUR_billions`: value in billions of Euros of trade (imports + exports) from/to the source (reporting) country.
+* `transactions`: Number of transactions (imports + exports) from/to the source (reporting) country.
+
+|src_country_name3 | src_country_id| value_EUR_billions| transactions|
+|:-----------------|--------------:|------------------:|------------:|
+|DEU               |             83|         3998.12285|     10872188|
+|GBR               |            236|         2002.70753|      6800244|
+|NLD               |            158|         1619.98900|      5645130|
+|ITA               |            110|         1420.44516|      6518149|
+|BEL               |             22|         1195.50386|      5122876|
+|ESP               |            210|         1020.86565|      5795177|
+|POL               |            178|          624.02937|      4114391|
+|AUT               |             15|          476.52731|      3933372|
+|SWE               |            216|          439.12938|      3742856|
+|IRL               |            107|          373.61078|      1372819|
+|HUN               |            101|          299.53064|      2486760|
+|SVK               |            203|          234.47536|      1647069|
+|PRT               |            179|          220.77436|      2418736|
+|ROU               |            183|          206.43504|      2107082|
+|GRC               |             86|          138.75852|      1678024|
+|LTU               |            130|           95.89326|      2013411|
+|SVN               |            204|           95.65554|      1858776|
+|BGR               |             35|           83.04779|      1201875|
+|LUX               |            131|           58.21414|      1006037|
+|HRV               |             56|           52.99638|      1569800|
+|LVA               |            124|           41.67150|      1223162|
+|MLT               |            139|           15.30971|       334372|
+|CYP               |             59|           12.20828|       403354|
 
 ### How to Read Output
 
