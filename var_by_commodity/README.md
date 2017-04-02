@@ -33,7 +33,7 @@ This provides a framework for a for calculating the variance in commodity unit p
 
 ### Raw Data Sample for Most Price-Variant Commodities
 
-As a convenience, for the top commodities flagged in these lists with the most variance, we export the raw records from the `trade` table.  We used this as a sanity check when developing and testing this methodology.   We intend for it to be used as a reference when investigating and developing intuitions into why these commodities show so much unit-price variance. 
+As a convenience, we export the raw records from the `trade` table for the top commodities flagged using this analysis.  We used this as a sanity check when developing and testing this methodology.   We intend for it to be used as a reference when investigating and developing intuitions into why these commodities show so much unit-price variance. 
 
 [coefficient of variation]:https://en.wikipedia.org/wiki/Coefficient_of_variation
 [@margaretmf]:https://github.com/margaretmf
