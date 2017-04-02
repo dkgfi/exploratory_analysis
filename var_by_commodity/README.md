@@ -17,6 +17,13 @@ This provides a framework for a for calculating the variance in commodity unit p
 * Only shipments measured in kilograms (`unit_1_id==24`)
 * Only shipments valued at > 1 in quantity and value (`quantity_1>0 & value>1 & is.na(value)==F`) 
 
+#### Comments on commodity sample
+
+* The full trade table contains `commodity_ids` ranging from **4** to **54745**.
+* Restricting the trade table to just `currency=='EUR'` leaves `commodity_ids` ranging from **27406** to **38026**. 
+* This leaves ~9k unique `commodity ids` shipped in EUR.
+* While commodities priced in USD have more unique commodities shipped (~26k vs the ~9k shipped in EUR), they account for less transactions in the trade table (~13% in USD vs the ~85% in EUR and ~2% in JPY).
+
 ### How to Read Output
 
 * `commodity_id`: commodity_id from trade table
