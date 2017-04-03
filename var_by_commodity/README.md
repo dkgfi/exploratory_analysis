@@ -14,7 +14,7 @@ This provides a framework for a for calculating the variance in commodity unit p
 
 * Imports into into EU/USA/Japan (`is_import=='t'`) are reported separately from the exports from these countries (`is_import=='f'`).  
 * Only goods priced in euros (`currency=='EUR'`).  Can be improved w/ [@margaretmf]'s exchange rate code.
-* Only shipments measured in kilograms (`unit_1_id==24`)
+* No restriction on units (however all shipments in EUR are measured in kilograms (`unit_1_id==24`)).
 * Only shipments valued at > 1 in quantity and value (`quantity_1>0 & value>1 & is.na(value)==F`) 
 
 #### Assumptions
@@ -28,6 +28,55 @@ We are assuming that `id` from the commodity table corresponds to `commodity_id`
 * This leaves ~9k unique `commodity ids` shipped in EUR.
 * While commodities priced in USD have more unique commodities shipped (~26k vs the ~9k shipped in EUR), they account for less transactions in the trade table (~13% in USD vs the ~85% in EUR and ~2% in JPY).
 * This sample includes only (and all) trades reported European countries (all US reported trade is in USD).  All EU trade (using `src_country_id`) is in `currency=='EUR'`.
+* All commodities priced in Euros (`currency=='EUR'`) are also measured in kilograms (`unit_1_id==24`).  The other ~48 unit types are split between USD and JPY.
+
+#### Unit Types by currency
+
+The numbers under each currency represent the total number of transactions in that currency for the corresponding unit type.  Note that all the transactions in Euros are denominated in Kilograms.
+
+| unit_1_id|description           |      EUR|     USD|     JPY|
+|---------:|:---------------------|--------:|-------:|-------:|
+|         1|Barrels               |        0|   56307|       0|
+|         2|Carat                 |        0|     561|     105|
+|         3|Content Kilogram      |        0|    2637|       0|
+|         5|Square Centimeters    |        0|   10474|       0|
+|         6|Content Gram          |        0|     270|       0|
+|         7|Content Metric Ton    |        0|   11748|       0|
+|         8|Clean Yield Kilogram  |        0|     357|       0|
+|         9|Dozen                 |        0|  730396|       0|
+|        10|Dozen Pieces          |        0|   26002|       0|
+|        11|Dozen Pair            |        0|   68215|       0|
+|        12|Doses                 |        0|       9|       0|
+|        14|Fiber Meter           |        0|    3956|       0|
+|        15|Gigabecquerels        |        0|       6|       0|
+|        16|Gross Containers      |        0|     314|       0|
+|        17|Gram                  |        0|    5668|    1845|
+|        19|Gross                 |        0|   38392|       0|
+|        21|Gross Tonnage         |        0|       0|      17|
+|        22|Hundreds              |        0|    5205|       0|
+|        24|Kilogram              | 73865660| 3985274| 1665234|
+|        27|Cubic Kilometers      |        0|    3648|       0|
+|        28|Kilogram Total Sugars |        0|     109|       0|
+|        29|Liters                |        0|  157776|   13354|
+|        30|Linear Meters         |        0|      12|       0|
+|        31|Meters                |        0|    7999|     400|
+|        32|Square Meters         |        0|  309082|    8139|
+|        33|Cubic Meters          |        0|   87671|    5407|
+|        34|Megabecquerels        |        0|       2|       0|
+|        35|Megawatt Hours        |        0|       1|       0|
+|        36|Number                |        0| 3057869|   95188|
+|        38|Pieces                |        0|   17234|       0|
+|        39|Proof Liter           |        0|   33214|       0|
+|        40|Pack                  |        0|    2432|       0|
+|        41|Pairs                 |        0|  137122|    1460|
+|        42|Square                |        0|     299|       0|
+|        43|Set                   |        0|       0|    1681|
+|        44|Metric Tons           |        0|  173266|   44519|
+|        46|Thousand Meters       |        0|      39|       0|
+|        48|Thousand              |        0|   28794|    1256|
+|        49|No First Unit Of Qty  |        0| 2261248|       0|
+
+
 
 
 #### Summary of sample
