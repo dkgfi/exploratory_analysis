@@ -47,7 +47,7 @@ agg_commodity_variance <- function(trade, is_import_t_or_f='t'){
   if(dim(trade)[1]==0) warning("Trade has no data :(")
   
   # keeping just standardized data.  Figure out what to do w the rest later
-  trade <- trade[unit_1_id==24 & is.na(value)==F & currency=='EUR' & quantity_1>0 & value>1 & is_import==is_import_t_or_f]
+  trade <- trade[is.na(value)==F & currency=='EUR' & quantity_1>0 & value>1 & is_import==is_import_t_or_f]
   
   # adding unit price column
   trade[,unit1price:=value/quantity_1]
@@ -172,7 +172,7 @@ agg_ex_dt <- agg_ex_dt[,colname_order, with=F]
 
 # saving and prettying-up the raw data from trade table for the most mispriced commodities
 t_save <- merge(t_save, commodity[, .(hs_description, hs_code, id)], by.x='commodity_id', by.y='id')
-t_save <- t_save[unit_1_id==24 & is.na(value)==F & currency=='EUR' & quantity_1>0 & value>1]
+t_save <- t_save[is.na(value)==F & currency=='EUR' & quantity_1>0 & value>1]
 t_save[,unit1price:=value/quantity_1] # adding unit price column
 
 # write results out to CSV
