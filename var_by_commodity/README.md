@@ -14,7 +14,7 @@ This provides a framework for a for calculating the variance in commodity unit p
 
 * Imports into into EU/USA/Japan (`is_import=='t'`) are reported separately from the exports from these countries (`is_import=='f'`).  
 * Only goods priced in euros (`currency=='EUR'`).  Can be improved w/ [@margaretmf]'s exchange rate code.
-* Only shipments measured in kilograms (`unit_1_id==24`)
+* No restriction on units (however all shipments in EUR are measured in kilograms (`unit_1_id==24`)).
 * Only shipments valued at > 1 in quantity and value (`quantity_1>0 & value>1 & is.na(value)==F`) 
 
 #### Assumptions
@@ -28,7 +28,7 @@ We are assuming that `id` from the commodity table corresponds to `commodity_id`
 * This leaves ~9k unique `commodity ids` shipped in EUR.
 * While commodities priced in USD have more unique commodities shipped (~26k vs the ~9k shipped in EUR), they account for less transactions in the trade table (~13% in USD vs the ~85% in EUR and ~2% in JPY).
 * This sample includes only (and all) trades reported European countries (all US reported trade is in USD).  All EU trade (using `src_country_id`) is in `currency=='EUR'`.
-* All commodities priced in Euros (`currency=='EUR'`) are also measured in Kilograms (`unit_1_id==24`).  The other ~48 unit types are split between USD and JPY.
+* All commodities priced in Euros (`currency=='EUR'`) are also measured in kilograms (`unit_1_id==24`).  The other ~48 unit types are split between USD and JPY.
 
 #### Unit Types by currency
 
